@@ -1,6 +1,8 @@
 # FormsMaterializedItem
 This Oracle Forms PoC demo shows a simple solution with PL/SQL Low-Code materializing of Forms Items.
 
+The completion of this repository is in progress.
+
 ### It includes 3 parts:
 * materializing a Forms none base table item with 3 additional items for labeling and messaging
 * shows a simple verification of Oracle password inputs
