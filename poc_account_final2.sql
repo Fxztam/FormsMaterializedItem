@@ -38,11 +38,11 @@ END W_N_F_I;
 
 BEGIN
 	
-	IF ERROR_CODE IN (42100) THEN
-		 NULL;
-	ELSE
-		 prc_info('ERR::'||ERROR_CODE||'/'||ERROR_TEXT);
-	END IF;
+   IF ERROR_CODE IN (42100) THEN
+      NULL;
+   ELSE
+      prc_info('ERR::'||ERROR_CODE||'/'||ERROR_TEXT);
+   END IF;
 
 END ON_ERROR;
 
@@ -60,23 +60,23 @@ BEGIN
 END ON_LOGON;
 
 DECLARE
-	l_res VARCHAR2(256);
+   l_res VARCHAR2(256);
 BEGIN
-	l_res:= pkg_Item.fnc_final_check;	
-	IF l_res<>'OK' THEN
-		 IF fnc_msg_query('$$$ User uccount is not completed ! $$$'||chr(10)||
-		 	                l_res ||chr(10)||
-		 	                'Do you want to exit ?')='YES' THEN
-		    EXIT_FORM(NO_VALIDATE);
-		 ELSE
-		 	  Raise Form_trigger_Failure;
-		 END IF;
-  END IF;
+   l_res:= pkg_Item.fnc_final_check;	
+   IF l_res<>'OK' THEN
+      IF fnc_msg_query('$$$ User uccount is not completed ! $$$'||chr(10)||
+		 	l_res ||chr(10)||
+		       'Do you want to exit ?')='YES' THEN
+	 EXIT_FORM(NO_VALIDATE);
+      ELSE
+         Raise Form_trigger_Failure;
+      END IF;
+   END IF;
 	
-	-- permanent storage function here ... --
-	prc_info('User account is completed .');
+   -- permanent storage function here ... --
+   prc_info('User account is completed .');
 	
-	EXIT_FORM;
+   EXIT_FORM;
 	
 END KEY_EXIT;
 
@@ -95,111 +95,77 @@ BEGIN
   pkg_item.prc_Enter;
 END W_N_I_INSTANCE;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
  
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Leave;
-
 END W_V_ITEM;
 
-BEGIN
-	
+BEGIN	
   pkg_item.prc_Enter;
-
 END W_N_I_INSTANCE;
- 
- 
+  
 DECLARE
-	l_res VARCHAR2(256);
-BEGIN
+   l_res VARCHAR2(256);
+BEGIN	
+   SYNCHRONIZE;
 	
-	SYNCHRONIZE;
-	
-	l_res:= pkg_Item.fnc_final_check;
-	IF l_res='OK' THEN
-		 prc_info(' User account is completed. ');
-	ELSE
-		 prc_info('$$$ User account is not completed. $$$'||chr(10)||l_res);
-	END IF;
-	
+   l_res:= pkg_Item.fnc_final_check;
+   IF l_res='OK' THEN
+      prc_info(' User account is completed. ');
+   ELSE
+      prc_info('$$$ User account is not completed. $$$'||chr(10)||l_res);
+   END IF;	
 END;
 
-
 BEGIN
-	
-	 DO_KEY('EXIT');
-	  
+   DO_KEY('EXIT');	  
 END;
 
 --- [EO showItemLevelTriggers] ---
@@ -215,12 +181,12 @@ PACKAGE pkg_Item IS
   C_BlockName CONSTANT VARCHAR2(32):= 'BLK_ACCOUNT';
      
   TYPE rec_def_t IS RECORD (id     	NUMBER(4),    
-  													block  	VARCHAR2(32),
+                            block  	VARCHAR2(32),
                             name   	VARCHAR2(32), 
                             label  	VARCHAR2(64), 
-                            text 	 	VARCHAR2(64), 
-                            msg 	 	VARCHAR2(64),
-                            notnull VARCHAR2(8),
+                            text 	VARCHAR2(64), 
+                            msg 	VARCHAR2(64),
+                            notnull     VARCHAR2(8),
                             type   	VARCHAR2(32)
                            );
                            
@@ -244,66 +210,71 @@ FUNCTION fnc_final_check RETURN VARCHAR2;
 PROCEDURE prc_chk_item (p_block VARCHAR2, p_item VARCHAR2, p_value VARCHAR2, p_result VARCHAR2 DEFAULT NULL);
 
 PROCEDURE prc_rec (p_ix PLS_INTEGER, p_block VARCHAR2, p_name VARCHAR2, p_label VARCHAR2, p_text VARCHAR2, 
-                 p_messg VARCHAR2 DEFAULT NULL, p_notnull VARCHAR2 DEFAULT 'YES', p_type VARCHAR2 DEFAULT 'NORMAL');
+                   p_messg VARCHAR2 DEFAULT NULL, p_notnull VARCHAR2 DEFAULT 'YES', p_type VARCHAR2 DEFAULT 'NORMAL');
 
 PROCEDURE prc_init_Items;
                 
 END pkg_Item;
 PROCEDURE prc_info(s VARCHAR2) IS
   al_button PLS_INTEGER;
-  al_id 		Alert;
+  al_id     Alert;
 BEGIN
-	-- ${open} --
-	al_id:= FIND_ALERT('INFO'); 
-	SET_ALERT_PROPERTY(al_id, ALERT_MESSAGE_TEXT, s ); 
-	al_button := SHOW_ALERT( al_id ); 
+   -- ${open} --
+   al_id:= FIND_ALERT('INFO'); 
+   SET_ALERT_PROPERTY(al_id, ALERT_MESSAGE_TEXT, s ); 
+   al_button := SHOW_ALERT( al_id ); 
 END prc_info;
+
 FUNCTION fnc_validate (p_item VARCHAR2) RETURN VARCHAR2 IS
-  l_vres VARCHAR2(256);
+   l_vres VARCHAR2(256);
 BEGIN	
-	IF p_item='EMAIL' THEN
-		 IF regexp_like(:BLK_ACCOUNT.EMAIL, 
-		    '([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})')
-		    THEN
+   IF p_item='EMAIL' THEN
+      IF regexp_like(:BLK_ACCOUNT.EMAIL, 
+		     '([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})')
+         THEN
          RETURN('OK');
-		 ELSE
-		 	   RETURN('$$$ Error: '|| pkg_Item.item_name('EMAIL').msg ||' $$$');
-     END IF;
-	ELSIF p_item='EMAIL2' THEN
-		 IF LOWER(:BLK_ACCOUNT.EMAIL)=LOWER(:BLK_ACCOUNT.EMAIL2) THEN
-		 	  RETURN('$$$ Error: eMail2 is the same as eMail ! $$$');
-		 END IF;
-		 IF regexp_like(:BLK_ACCOUNT.EMAIL2, 
-		    '([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})')
-		   THEN
+      ELSE
+	 RETURN('$$$ Error: '|| pkg_Item.item_name('EMAIL').msg ||' $$$');
+      END IF;
+      
+   ELSIF p_item='EMAIL2' THEN
+      IF LOWER(:BLK_ACCOUNT.EMAIL)=LOWER(:BLK_ACCOUNT.EMAIL2) THEN
+	 RETURN('$$$ Error: eMail2 is the same as eMail ! $$$');
+      END IF;
+      IF regexp_like(:BLK_ACCOUNT.EMAIL2, 
+		     '([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})')
+	 THEN
          RETURN('OK');
-		 ELSE
-		 	   RETURN('$$$ Error: '|| pkg_Item.item_name('EMAIL2').msg ||' $$$');
-     END IF;
-	ELSIF p_item='PASSWORD' THEN
-		 IF :BLK_ACCOUNT.PASSWORD<>pkg_Item.item_name('PASSWORD').text THEN
-		    l_vres:=v#r#fy_pw$001(:BLK_ACCOUNT.USERNAME,:BLK_ACCOUNT.PASSWORD);
-			  IF l_vres='OK' THEN
-			 	   RETURN('OK');
-			  ELSE
-			     RETURN(l_vres);
-			  END IF;
-		 ELSE
-			  RETURN('$$$ Error: Username and Password are not completed ! $$$');
-		 END IF;
-	ELSIF p_item='PASSWORD_RETRY' THEN
-		 IF :PASSWORD<>:PASSWORD_RETRY THEN
-		 	  RETURN('$$$ Error: Passwords are not identical ! $$$');
-		 END IF;
-	END IF;
+      ELSE
+	 RETURN('$$$ Error: '|| pkg_Item.item_name('EMAIL2').msg ||' $$$');
+      END IF;
 	
-	RETURN('OK');
+    ELSIF p_item='PASSWORD' THEN
+	 IF :BLK_ACCOUNT.PASSWORD<>pkg_Item.item_name('PASSWORD').text THEN
+	    l_vres:=v#r#fy_pw$001(:BLK_ACCOUNT.USERNAME,:BLK_ACCOUNT.PASSWORD);
+	    IF l_vres='OK' THEN
+	       RETURN('OK');
+	    ELSE
+	       RETURN(l_vres);
+	    END IF;
+         ELSE
+	    RETURN('$$$ Error: Username and Password are not completed ! $$$');
+         END IF;
+	
+     ELSIF p_item='PASSWORD_RETRY' THEN
+	 IF :PASSWORD<>:PASSWORD_RETRY THEN
+	    RETURN('$$$ Error: Passwords are not identical ! $$$');
+	 END IF;
+     END IF;
+	
+   RETURN('OK');
 	
 EXCEPTION WHEN OTHERS THEN
-	RETURN('$$$ EXCEPTION in fbc_validate) - item: '||p_item||' : '||sqlerrm);
+    RETURN('$$$ EXCEPTION in fbc_validate) - item: '||p_item||' : '||sqlerrm);
 END;
+
 FUNCTION v#r#fy_pw$001 (	  
-    p_username      varchar2,
+        p_username      varchar2,
   	p_password      varchar2
 ) RETURN VARCHAR2 IS
 
@@ -334,8 +305,8 @@ FUNCTION v#r#fy_pw$001 (
    l_cnt_special  NUMBER(3) :=0;
    l_cnt_NO       NUMBER(3) :=0;
    l_1un          CHAR(1);
-   l_lenun				NUMBER(2);
-   l_char 				CHAR(1);
+   l_lenun	  NUMBER(2);
+   l_char 	  CHAR(1);
 
 BEGIN 
    -- Check for the minimum length of the password --
@@ -345,7 +316,7 @@ BEGIN
    END IF;
    -- Check if the password is same as the username or username(1-100)
    IF LOWER(password) = LOWER(p_username) THEN
-     RETURN('$$$ Error: Password same as or similar to user $$$');
+      RETURN('$$$ Error: Password same as or similar to user $$$');
    END IF;
    l_lenun := length(p_username);
    l_1un   := substr(p_username,1,1);
@@ -407,15 +378,15 @@ FUNCTION fnc_msg_query(p_msg VARCHAR2) RETURN VARCHAR2 IS
    l_id 		Alert;
    l_res VARCHAR2(32);
 BEGIN
-	 l_id:= FIND_ALERT('QUERY'); 
- 	 SET_ALERT_PROPERTY(l_id, ALERT_MESSAGE_TEXT, p_msg ); 
-	 l_button := SHOW_ALERT( l_id ); 
-	 IF l_button = ALERT_BUTTON1 THEN
-         l_res := 'YES';
-      ELSIF l_button = ALERT_BUTTON2 THEN
-         l_res := 'NO';
-      ELSE
-         l_res := 'CANCEL';
+   l_id:= FIND_ALERT('QUERY'); 
+   SET_ALERT_PROPERTY(l_id, ALERT_MESSAGE_TEXT, p_msg ); 
+   l_button := SHOW_ALERT( l_id ); 
+   IF l_button = ALERT_BUTTON1 THEN
+      l_res := 'YES';
+   ELSIF l_button = ALERT_BUTTON2 THEN
+      l_res := 'NO';
+   ELSE
+      l_res := 'CANCEL';
    END IF;
       
    RETURN(l_res);
@@ -426,14 +397,14 @@ PROCEDURE prc_chk_item_sequence IS
    -- Friedhold Matz - 2018-FEB --
    -- Automated self check sequence definition . --
 BEGIN
-	 --                     block          item        			   value              result( DEFAULT::OK | NOK )
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 				'Tester'         								);
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'FULLNAME', 				'Friedhold Matz' 								);
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    				'fx@xx.'         							,'OK'	); -- <<< that's FALSE !
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    				'fx@xx.com'      						    );
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',    				'fx@xx.com'      							,'NOK'	);
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',    				'fy@xx.com'      							 	);
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'QUERY',    				'What''s the name of your cat ?'  );
+	 --               block          item        			   value              result( DEFAULT:OK | NOK )
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 				'Tester'         		);
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'FULLNAME', 				'Friedhold Matz' 		);
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    				'fx@xx.'         	      ,'OK'); -- <<< that's FALSE !
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    				'fx@xx.com'      		);
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',    				'fx@xx.com'      	      ,'NOK');
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',    				'fy@xx.com'      		);
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'QUERY',    				'What''s the name of your cat ?');
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'ANSWER',   				'Susi'           							  );
    
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD', 				'13aaaPPP+#-'                 ,'NOK');
@@ -447,9 +418,9 @@ BEGIN
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD', 				'123aaaPPP+#-123456'            );  
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD', 				'123aaaPPP+#-1234567890'        );
    
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	'123aaaPPP+#-1234567891'        );
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	'123aaaPPP+#-1234567890'        );
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'BT_COMMIT', 		 		'PRESS'      );
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	                '123aaaPPP+#-1234567891'        );
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	                '123aaaPPP+#-1234567890'        );
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'BT_COMMIT', 		 		'PRESS'                         );
    
    -- clear (reset) items --
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 				''      );
@@ -459,7 +430,7 @@ BEGIN
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'QUERY',    				''      );
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'ANSWER',   				''      );
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD', 				''      );
-   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	''      );
+   pkg_Item.prc_chk_item('BLK_ACCOUNT', 'PASSWORD_RETRY', 	                ''      );
    
    pkg_Item.prc_chk_item('BLK_ACCOUNT', 'BT_COMMIT', 				'GO'    );
    
@@ -474,10 +445,9 @@ PACKAGE BODY pkg_Item IS
 -----------------------------------------------------------------------------------
 PROCEDURE prc_enable_item (p_item VARCHAR2) IS
 BEGIN
-	 -- display items only ! --
+   -- display items only ! --
    Set_Item_Property(p_item , VISIBLE, PROPERTY_TRUE); 
-   -- Set_Item_Property(p_item , ENABLED, PROPERTY_TRUE);  
-   
+   -- Set_Item_Property(p_item , ENABLED, PROPERTY_TRUE);     
 END prc_enable_item;
 -----------------------------------------------------------------------------------
 PROCEDURE sleep (p_x NUMBER) IS
@@ -492,22 +462,21 @@ END sleep;
 FUNCTION fnc_get_txtnnullc (p_bit VARCHAR2, p_txt VARCHAR2)RETURN VARCHAR2 IS
 BEGIN
    IF pkg_Item.item_name(p_bit).notnull='YES' THEN
-   	  RETURN(p_txt||' *');
+      RETURN(p_txt||' *');
    ELSE
-   	  RETURN(p_txt);
+      RETURN(p_txt);
    END IF;
 END fnc_get_txtnnullc;
 -----------------------------------------------------------------------------------
 FUNCTION fnc_sign_msg (p_txt VARCHAR2) RETURN VARCHAR2 IS
 BEGIN
-	 CASE p_txt 
-	 		WHEN 'LIGHT'  THEN RETURN('VA_TXT_LIGHT_MSG'); 
-	 		WHEN 'MEDIUM' THEN RETURN('VA_TXT_MEDIUM_MSG'); 
-	 		WHEN 'STRONG' THEN RETURN('VA_TXT_STRONG_MSG'); 
+   CASE p_txt 
+	WHEN 'LIGHT'  THEN RETURN('VA_TXT_LIGHT_MSG'); 
+	WHEN 'MEDIUM' THEN RETURN('VA_TXT_MEDIUM_MSG'); 
+	WHEN 'STRONG' THEN RETURN('VA_TXT_STRONG_MSG'); 
    ELSE
-	    RETURN('VA_TXT_ERROR_MSG');
+	RETURN('VA_TXT_ERROR_MSG');
    END CASE; 
-
 END fnc_sign_msg;
 -----------------------------------------------------------------------------------
 
@@ -516,8 +485,8 @@ END fnc_sign_msg;
 -----------------------------------------------------------------------------------
 PROCEDURE prc_Enter IS
    l_blk    VARCHAR2(32);
-	 l_fit 		VARCHAR2(32);
-	 l_bit 		VARCHAR2(32);
+   l_fit    VARCHAR2(32);
+   l_bit    VARCHAR2(32);
 BEGIN			
    l_fit:= :SYSTEM.CURSOR_ITEM;  
    -- get blank item name --
@@ -538,8 +507,8 @@ BEGIN
    Set_Item_Property(l_fit , VISUAL_ATTRIBUTE, 'VA_TEXT');   
    --
    IF pkg_Item.item_name(l_bit).type='SECURE' THEN
-  	  -- hide text --
-  	  Set_item_Property(l_blk||'.'||l_bit, ECHO, PROPERTY_FALSE); 	     
+      -- hide text --
+      Set_item_Property(l_blk||'.'||l_bit, ECHO, PROPERTY_FALSE); 	     
    END IF; 
    
   EXCEPTION WHEN OTHERS THEN
@@ -547,11 +516,11 @@ BEGIN
 END prc_Enter;
 -----------------------------------------------------------------------------------
 PROCEDURE prc_Leave IS
-  l_blk      VARCHAR2(32);
-	l_fit 		 VARCHAR2(32);
-	l_bit 		 VARCHAR2(32);
-	l_it_value VARCHAR2(64);
-	l_vres     VARCHAR2(512);	
+   l_blk      VARCHAR2(32);
+   l_fit      VARCHAR2(32);
+   l_bit      VARCHAR2(32);
+   l_it_value VARCHAR2(64);
+   l_vres     VARCHAR2(512);	
 BEGIN		
   l_fit      := :SYSTEM.CURSOR_ITEM; 
   l_it_value := NAME_IN(l_fit); 
@@ -559,34 +528,33 @@ BEGIN
   l_blk      := pkg_Item.item_name(l_bit).block;
   
   IF l_it_value IS NULL OR l_it_value=pkg_Item.item_name(l_bit).text THEN 	 	
-	   COPY(pkg_Item.item_name(l_bit).text, l_fit);
-	   COPY(pkg_Item.item_name(l_bit).label, l_blk||'.'||'LABEL_'||l_fit);  
-  	 -- underline to empty  --
-   	 Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit , VISUAL_ATTRIBUTE, 'VA_UL_EMPTY');     	 
+     COPY(pkg_Item.item_name(l_bit).text, l_fit);
+     COPY(pkg_Item.item_name(l_bit).label, l_blk||'.'||'LABEL_'||l_fit);  
+     -- underline to empty  --
+     Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit , VISUAL_ATTRIBUTE, 'VA_UL_EMPTY');     	 
      -- deactivate label    --
      Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISIBLE, PROPERTY_FALSE);  
      --
      IF pkg_Item.item_name(l_bit).type='SECURE' THEN
-  	    -- hide text --
-  	    Set_item_Property(l_blk||'.'||l_bit, ECHO, PROPERTY_TRUE); 	     
+  	-- hide text --
+  	Set_item_Property(l_blk||'.'||l_bit, ECHO, PROPERTY_TRUE); 	     
      END IF; 	 
      -- activate insert property --  
-     Set_Item_Property(l_fit , VISUAL_ATTRIBUTE, 'VA_TEXT_INSERT');     
-     
-   ELSE
-  	 l_vres:= fnc_validate(l_bit);
-  	 IF substr(l_vres,1,3)<>'$$$' THEN
-   	    IF l_vres NOT IN ('OK', 'LIGHT', 'MEDIUM', 'STRONG') THEN
-   	    	 Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_LABEL_ERROR');  
-   	    	 -- underline to error full  --
-   				 prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
-   		 	   Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit, VISUAL_ATTRIBUTE, 'VA_UL_ERROR'); 
-	   	     COPY(l_vres, l_blk||'.'||'MSG_'||l_bit);
-	   	     -- Set_Item_Property(pkg_Item.item_name(l_bit).block||'.'||'MSG_'||l_bit , VISUAL_ATTRIBUTE, fnc_sign_msg(l_vres));
-	   	     prc_enable_item(l_blk||'.'||'MSG_'||l_bit);
-   	    ELSE
-   	    	 Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_LABEL_OK');
-   	    	 prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
+     Set_Item_Property(l_fit , VISUAL_ATTRIBUTE, 'VA_TEXT_INSERT');         
+  ELSE
+     l_vres:= fnc_validate(l_bit);
+     IF substr(l_vres,1,3)<>'$$$' THEN
+   	IF l_vres NOT IN ('OK', 'LIGHT', 'MEDIUM', 'STRONG') THEN
+   	   Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_LABEL_ERROR');  
+   	   -- underline to error full  --
+   	   prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
+   	   Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit, VISUAL_ATTRIBUTE, 'VA_UL_ERROR'); 
+	   COPY(l_vres, l_blk||'.'||'MSG_'||l_bit);
+	   -- Set_Item_Property(pkg_Item.item_name(l_bit).block||'.'||'MSG_'||l_bit , VISUAL_ATTRIBUTE, fnc_sign_msg(l_vres));
+	   prc_enable_item(l_blk||'.'||'MSG_'||l_bit);
+   	ELSE
+   	   Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_LABEL_OK');
+   	   prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
    		 	   Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit , VISUAL_ATTRIBUTE, 'VA_UL_FULL'); 
    		 	   IF l_vres<>'OK' THEN
    		 	      prc_enable_item(l_blk||'.'||'MSG_'||l_bit);
@@ -598,9 +566,9 @@ BEGIN
    	    prc_enable_item(l_blk||'.'||'LABEL_'||l_bit); 	
    	    Set_Item_Property(l_blk||'.'||'LABEL_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_LABEL_ERROR');
   	    -- underline to error full  --
-   			prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
-   			Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit, VISUAL_ATTRIBUTE, 'VA_UL_ERROR'); 
-   			-- error msg -- 
+   	    prc_enable_item(l_blk||'.'||'UNDER_'||l_bit);
+   	    Set_Item_Property(l_blk||'.'||'UNDER_'||l_bit, VISUAL_ATTRIBUTE, 'VA_UL_ERROR'); 
+   	    -- error msg -- 
   	    COPY(l_vres, l_blk||'.'||'MSG_'||l_bit);
   	    prc_enable_item(l_blk||'.'||'MSG_'||l_bit);  
   	    Set_Item_Property(l_blk||'.'||'MSG_'||l_bit , VISUAL_ATTRIBUTE, 'VA_TXT_ERROR_MSG');   	    
@@ -615,15 +583,15 @@ FUNCTION fnc_final_check RETURN VARCHAR2 IS
    l_value VARCHAR2(64);
 BEGIN
    FOR i IN 1.. pkg_Item.item_ix.count LOOP
-   	   l_value:= NAME_IN(pkg_Item.item_ix(i).name);
-  	   IF (l_value IS NULL AND pkg_Item.item_ix(i).notnull='YES') OR 
+       l_value:= NAME_IN(pkg_Item.item_ix(i).name);
+       IF (l_value IS NULL AND pkg_Item.item_ix(i).notnull='YES') OR 
   	   	  -- item label text ? --
   	   	  (l_value=pkg_Item.item_ix(i).text AND pkg_Item.item_ix(i).notnull='YES') OR
   	   	  -- item error message ? --
   	   	  substr(NAME_IN(pkg_Item.item_name(pkg_Item.item_ix(i).name).block||'.'||
   	   	                 'MSG_'||pkg_Item.item_ix(i).name),1,3)='$$$' THEN 	   	  
   	   	  RETURN('Item: '|| pkg_Item.item_ix(i).name);
-  	   END IF; 		 
+       END IF; 		 
    END LOOP;
    
    RETURN('OK'); 
@@ -635,13 +603,13 @@ END fnc_final_check;
 PROCEDURE prc_chk_item (p_block VARCHAR2, p_item VARCHAR2, p_value VARCHAR2, p_result VARCHAR2 DEFAULT NULL ) IS
    l_res VARCHAR2(16);  
 BEGIN	
-	 go_item(p_block||'.'||p_item);
-	 IF  p_value='GO' THEN 
-	     RETURN;
-	 ELSIF p_value='PRESS' THEN
-	 	   Execute_Trigger('WHEN-BUTTON-PRESSED');  
-	 	   sleep(100);
-	 ELSE 
+   go_item(p_block||'.'||p_item);
+   IF p_value='GO' THEN 
+      RETURN;
+   ELSIF p_value='PRESS' THEN
+      Execute_Trigger('WHEN-BUTTON-PRESSED');  
+      sleep(100); 
+   ELSE 
 	 	   -- setter & getter item values --
 			 Execute_Trigger('WHEN-NEW-ITEM-INSTANCE');  
 			 Copy(p_value, p_block||'.'||p_item);
@@ -742,29 +710,29 @@ PROCEDURE prc_Set_Items IS
    -- item value definitions --
 BEGIN
 	 -- place your item definitions here . ! --
-		 pkg_Item.prc_rec(1 , 'BLK_ACCOUNT', 'USERNAME', 		    'User name', 					 	
-		         'Enter your user name', 	         							'Must begin with .. followed .. #_$');
+		 pkg_Item.prc_rec(1 , 'BLK_ACCOUNT', 'USERNAME', 		   'User name', 					 	
+		                      'Enter your user name', 	         	   'Must begin with .. followed .. #_$');
 		         
-		 pkg_Item.prc_rec(2 , 'BLK_ACCOUNT', 'FULLNAME', 		   	'Full name', 					
-		         'Enter your full name', 			  	 							'Must begin with .. followed .. #_$');
+		 pkg_Item.prc_rec(2 , 'BLK_ACCOUNT', 'FULLNAME', 		   'Full name', 					
+		                      'Enter your full name', 			   'Must begin with .. followed .. #_$');
 		         
-		 pkg_Item.prc_rec(3 , 'BLK_ACCOUNT', 'EMAIL',    		   	'Email address', 				
-		         'Enter your first email address', 							'Not a valid email format !');
+		 pkg_Item.prc_rec(3 , 'BLK_ACCOUNT', 'EMAIL',    		   'Email address', 				
+		                      'Enter your first email address', 	   'Not a valid email format !');
 		         
-	 	 pkg_Item.prc_rec(4 , 'BLK_ACCOUNT', 'EMAIL2', 			   	'Second email address',  
-	 	         'Enter your second email address',							'Not a valid email format !', 'NO');
+	 	 pkg_Item.prc_rec(4 , 'BLK_ACCOUNT', 'EMAIL2', 			   'Second email address',  
+	 	                      'Enter your second email address',           'Not a valid email format !', 'NO');
 	 	         
-		 pkg_Item.prc_rec(5 , 'BLK_ACCOUNT', 'QUERY', 				  'Users query', 																				
-		         'Enter your query (e.g. "Name of my Cat")',    'Must begin with .. followed .. #_$');
+		 pkg_Item.prc_rec(5 , 'BLK_ACCOUNT', 'QUERY', 			   'Users query', 																				
+		                      'Enter your query (e.g. "Name of my Cat")',  'Must begin with .. followed .. #_$');
 		         
-		 pkg_Item.prc_rec(6 , 'BLK_ACCOUNT', 'ANSWER',   		   	'Users answer',          															
-		 				 'Enter the answer of your query',              '.. ', 'YES', 'SECURE');
+		 pkg_Item.prc_rec(6 , 'BLK_ACCOUNT', 'ANSWER',   		   'Users answer',          															
+		 		       'Enter the answer of your query',           '.. ', 'YES', 'SECURE');
 		 				 
-		 pkg_Item.prc_rec(7 , 'BLK_ACCOUNT', 'PASSWORD',   	   	'Password (3 lowers,3 uppers,3 numbers,3 specials)',   
-		 				 'Enter the password (min. 12 characters)', 	  '.. Error message comes from intern ..', 'YES', 'SECURE');
+		 pkg_Item.prc_rec(7 , 'BLK_ACCOUNT', 'PASSWORD',   	   	   'Password (3 lowers,3 uppers,3 numbers,3 specials)',   
+		 		       'Enter the password (min. 12 characters)',  '.. Error message comes from intern ..', 'YES', 'SECURE');
 		 				 
-		 pkg_Item.prc_rec(8 , 'BLK_ACCOUNT', 'PASSWORD_RETRY',  'Retry password', 
-		 				 'Re-enter the password',             					'.. Error message comes from intern ..', 'YES', 'SECURE');	 
+		 pkg_Item.prc_rec(8 , 'BLK_ACCOUNT', 'PASSWORD_RETRY',             'Retry password', 
+		 		      'Re-enter the password',             	   '.. Error message comes from intern ..', 'YES', 'SECURE');	 
 		 				 				 
   EXCEPTION WHEN OTHERS THEN
   	 prc_info('$$$ EXCEPTION pkg_Item.prc_Set_Items: '||sqlerrm);
