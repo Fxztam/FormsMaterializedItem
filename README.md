@@ -10,7 +10,7 @@ The completion of this repository is in progress.
 
 ## Getting Started
 
-The modernization of Forms Items with materialized Item handlings shows here:
+The modernization of Forms Items with materialized Item handlings is shown here:
 <img src="http://www.fmatz.com/MITEM.gif" />
 
 ### Prerequisites
