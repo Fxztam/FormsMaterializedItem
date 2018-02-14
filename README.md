@@ -1,5 +1,5 @@
 # FormsMaterializedItem
-This Oracle Forms PoC demo shows a simple solution with PL/SQL Low-Code materializing of Forms Items.
+This Oracle Forms PoC demo shows a simple solution for materializing of Forms Items with PL/SQL Low-Code.
 
 The completion of this repository is in progress.
 
