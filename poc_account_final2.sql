@@ -703,8 +703,8 @@ PROCEDURE prc_init_Items IS
  END prc_init_Items;
 
 -----------------------------------------------------------------------------------
-
-END;
+END pkg_Item;
+		       
 PROCEDURE prc_Set_Items IS
    -- Friedhold Matz - 2018-FEB --
    -- item value definitions --
@@ -735,7 +735,7 @@ BEGIN
 		 		      'Re-enter the password',             	   '.. Error message comes from intern ..', 'YES', 'SECURE');	 
 		 				 				 
   EXCEPTION WHEN OTHERS THEN
-  	 prc_info('$$$ EXCEPTION pkg_Item.prc_Set_Items: '||sqlerrm);
+  	 prc_info('$$$ EXCEPTION prc_Set_Items: '||sqlerrm);
 END prc_Set_Items;
 
 --- [EO showProgrammUnits] ---
