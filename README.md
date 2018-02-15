@@ -2,10 +2,11 @@
 This Oracle Forms PoC demo shows simple materialized handlings of Forms items with native PL/SQL Low-Code.
 
 
-### Solution includes 3 parts:
+### Solution includes 4 parts:
 * Materializing of non-database table Forms items with 3 additional items for labeling, underlining and messaging
 * shows a simple verification of Oracle password inputs
-* demonstrates a automatic Forms item test sequence with comparizion of result states and values.
+* completion check of all defined items
+* demonstrates a automatic Forms item test sequence with comparizion of result states and values
 
 ## Getting Started
 
@@ -83,6 +84,23 @@ This modernization of Forms items with materialized item handlings is shown here
         *         substr(v#r#fy_pw$001,1,3)= '$$$' => '$$$ Error .. $$$' .
         */
     ```
+* Final completion check of all defined items, e.g. in **KEY-EXIT** trigger:
+
+    ```sql
+        DECLARE
+            l_res VARCHAR2(256);
+        BEGIN
+            l_res:= pkg_Item.fnc_final_check;
+            IF l_res<>'OK' THEN
+                IF fnc_msg_query('$$$ User uccount is not completed ! $$$'||chr(10)||
+                                 l_res ||chr(10)||
+                                 'Do you want to exit ?')='YES' THEN
+                    Exit_Form(NO_VALIDATE);
+                ELSE
+                    Raise Form_trigger_Failure;
+                END IF;
+        END IF;
+    ```
 
 ## Running the tests
 
@@ -91,5 +109,5 @@ This modernization of Forms items with materialized item handlings is shown here
 
 ## Not implemented
 
-* A generic handling of the item objects or visual properties is not implemented yet.
-* This solution works only for Forms non-database table items.
+* A generic handling of item objects or visual properties is not implemented yet.
+* This materialized item solution here works only for Forms non-database table items.
