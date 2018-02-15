@@ -25,6 +25,8 @@ This modernization of Forms items with materialized item handlings is shown here
 
 * Item definitions in the Forms module:
 
+<img src="http://www.fmatz.com/MITEM-FULL.png" />
+
 * Initializing the Forms items in Users's **prc_Set_Items** procedure:
 
     ```sql
@@ -86,7 +88,9 @@ This modernization of Forms items with materialized item handlings is shown here
 * Automatic test sequence: On item "close" right mouse click and "check all" 
 * single test with own inputs.
 
+## Known issues
+
 ## Not implemented
 
 * A generic handling of the item objects or visual properties is not implemented yet.
-* This solution works for non-database table Forms items.
+* This solution works only for Forms non-database table items.
