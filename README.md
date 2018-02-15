@@ -53,7 +53,7 @@ This modernization of Forms items with materialized item handlings is shown here
                             'Enter your user name',    'Must begin with .. followed .. #_$');
     ```
 
-* every value item must have following two triggers & code:
+* Every value item must have following two triggers & code:
 
     ```sql
         -- WEHN-NEW-ITEM-INSTANCE trigger --
@@ -67,28 +67,27 @@ This modernization of Forms items with materialized item handlings is shown here
         END W_V_ITEM;
     ```
 
-* define the automatic test sequence in Users's procedure:
+* Validation for Oracle paswword inputs:
 
     ```sql
-        PROCEDURE prc_chk_item_sequence IS
-        -- Automated self check sequence definition . --
-        BEGIN
-            --                   block          item       value        result { DEFAULT:'OK' | 'NOK' }
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 'Tester'          );
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'FULLNAME', 'Friedhold Matz'  );
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.'        ,'OK');  -- <<< that's FALSE !
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.com'       );
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',   'fx@xx.com'     ,'NOK');
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',   'fy@xx.com'       );
-
+        FUNCTION v#r#fy_pw$001  (
+            p_username      varchar2,
+            p_password      varchar2
+        ) RETURN VARCHAR2 IS
+        /*
+        * This password check enabled some special characters using with "my :-} password.§$"
+        * and get the password strength in Oracle Forms for the Oracle DB password setting.
+        * That's a maximal password variant; remember that you can use ANY characters
+        * in Oracle DB enclosed in double quotes e.g. " . - # ~ 12 .."
+        * RETURN: substr(v#r#fy_pw$001,1,3)<> '$$$' => {LIGHT|MEDIUM|STRONG} :: 'OK'
+        *         substr(v#r#fy_pw$001,1,3) = '$$$' => '$$$ Error .. $$$' .
+        */
     ```
 
 ## Running the tests
 
 * Automatic test sequence: On item "close" right mouse click and "check all" 
-* single test with own inputs.
-
-## Known issues
+* single tests with own inputs.
 
 ## Not implemented
 
