@@ -86,8 +86,6 @@ This modernization of Forms items with materialized item handlings is shown here
 * Automatic test sequence: On item "close" right mouse click and "check all" 
 * single test with own inputs.
 
-## Known issues
-
 ## Not implemented
 
 * A generic handling of the item objects or visual properties is not implemented yet.
