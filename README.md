@@ -1,8 +1,9 @@
 # FormsMaterializedItem
 This Oracle Forms PoC demo shows simple materialized handlings of Forms items with native PL/SQL Low-Code.
 
+
 ### Solution includes 3 parts:
-* Materializing of none based table Forms items with 3 additional items for labeling, underlining and messaging
+* Materializing of non-database table Forms items with 3 additional items for labeling, underlining and messaging
 * shows a simple verification of Oracle password inputs
 * demonstrates a automatic Forms item test sequence with comparizion of result states and values.
 
@@ -70,7 +71,7 @@ This modernization of Forms items with materialized item handlings is shown here
         PROCEDURE prc_chk_item_sequence IS
         -- Automated self check sequence definition . --
         BEGIN
-            --                     block          item     value        result { DEFAULT:'OK' | 'NOK' }
+            --                   block          item       value        result { DEFAULT:'OK' | 'NOK' }
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 'Tester'          );
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'FULLNAME', 'Friedhold Matz'  );
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.'        ,'OK');  -- <<< that's FALSE !
@@ -89,4 +90,5 @@ This modernization of Forms items with materialized item handlings is shown here
 
 ## Not implemented
 
-A generic handling of the item objects or visual properties is not implemented yet.
+* A generic handling of the item objects or visual properties is not implemented yet.
+* This solution works for non-database table Forms items.
