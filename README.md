@@ -67,7 +67,7 @@ This modernization of Forms items with materialized item handlings is shown here
         END W_V_ITEM;
     ```
 
-* Validation for Oracle paswword inputs:
+* Verification of Oracle password inputs:
 
     ```sql
         FUNCTION v#r#fy_pw$001  (
@@ -76,11 +76,11 @@ This modernization of Forms items with materialized item handlings is shown here
         ) RETURN VARCHAR2 IS
         /*
         * This password check enabled some special characters using with "my :-} password.§$"
-        * and get the password strength in Oracle Forms for the Oracle DB password setting.
-        * That's a maximal password variant; remember that you can use ANY characters
-        * in Oracle DB enclosed in double quotes e.g. " . - # ~ 12 .."
-        * RETURN: substr(v#r#fy_pw$001,1,3)<> '$$$' => {LIGHT|MEDIUM|STRONG} :: 'OK'
-        *         substr(v#r#fy_pw$001,1,3) = '$$$' => '$$$ Error .. $$$' .
+        * and get the password strength in Oracle Forms for Oracle DB password settings.
+        * Remember that you can use ANY characters in Oracle DB
+        * enclosed in double quotes e.g. " . - # ~ 12 ..".
+        * RETURN: substr(v#r#fy_pw$001,1,3)<>'$$$' => {LIGHT|MEDIUM|STRONG} :: 'OK'
+        *         substr(v#r#fy_pw$001,1,3)= '$$$' => '$$$ Error .. $$$' .
         */
     ```
 
