@@ -611,17 +611,7 @@ END fnc_final_check;
 -----------------------------------------------------------------------------------
 PROCEDURE prc_chk_item (p_block VARCHAR2, p_item VARCHAR2, p_value VARCHAR2, p_result VARCHAR2 DEFAULT NULL ) IS
    l_res VARCHAR2(16);  
-BEGIN	
-   -- check : Items exists in definition ?     --
-   BEGIN
-      IF pkg_Item.item_name(p_item).block||'.'||pkg_Item.item_name(p_item).name<>p_block||'.'||p_item THEN
-         NULL;
-      END IF;
-      EXCEPTION WHEN OTHERS THEN
-	 prc_info('$$$ EXCEPTION : pkg_Item.prc_chk_item(Item_exists): '||p_block||'.'||p_item);
-	 Raise Form_Trigger_Failure;
-   END achk_exists;
-		       
+BEGIN			       
    go_item(p_block||'.'||p_item);
    IF p_value='GO' THEN 
       RETURN;
