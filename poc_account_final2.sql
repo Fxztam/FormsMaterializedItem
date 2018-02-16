@@ -4,8 +4,8 @@
 
 /*
  * Created by Friedhold.Matz@yahoo.com - Jan-2018
- * It's only a first PoC Demo to demonstrate the simple power of Forms
- * for native modernizing of Forms Items as "Materialized Items" :
+ * This PoC Demo demonstrates the Oracle Forms power 
+ * of Forms Items modernizing as "Materialized Items":
  *
  * - Low Native PL/SQL Forms code
  * - using simple four Items for one: 
@@ -15,13 +15,22 @@
  *   o MSG_Item .
  * - D_% items: Not used, only as separators.
  * - demonstrate a low code automated self check of this items.
- * --------------------------------------------------------------
+ *
+ * Basic features:
+ * - Materialized items
+ * - Verification of Oracle password incl. special characters
+ * - Final check procedure of all defined items
+ * - Automatic test sequence for expected results and item values.
+ * ---------------------------------------------------------------
+ *
  * NOT's: 
  * ------
  * - no using for production (only at own risk)
- * - no generic solution or object library based
+ * - no generic solution (yet)
  * - no maintainability
  * - no guarantee.
+ *
+ * Hope you can accept & enjoy it.
  *
  */
 
@@ -603,6 +612,16 @@ END fnc_final_check;
 PROCEDURE prc_chk_item (p_block VARCHAR2, p_item VARCHAR2, p_value VARCHAR2, p_result VARCHAR2 DEFAULT NULL ) IS
    l_res VARCHAR2(16);  
 BEGIN	
+   -- check : Items exists in definition ?     --
+   BEGIN
+      IF pkg_Item.item_name(p_item).block||'.'||pkg_Item.item_name(p_item).name<>p_block||'.'||p_item THEN
+         NULL;
+      END IF;
+      EXCEPTION WHEN OTHERS THEN
+	 prc_info('$$$ EXCEPTION : pkg_Item.prc_chk_item(Item_exists): '||p_block||'.'||p_item);
+	 Raise Form_Trigger_Failure;
+   END achk_exists;
+		       
    go_item(p_block||'.'||p_item);
    IF p_value='GO' THEN 
       RETURN;
@@ -615,6 +634,7 @@ BEGIN
       Copy(p_value, p_block||'.'||p_item);
       Execute_Trigger('WHEN-VALIDATE-ITEM');
       sleep(150);
+		       
       -- check expected/real result --
       l_res:='OK';
       IF (substr(NAME_IN(pkg_Item.item_name(p_item).block||'.'||'MSG_'||p_item) ,1,3)='$$$') THEN
