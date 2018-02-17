@@ -76,7 +76,7 @@ This modernization of Forms items with materialized item handlings is shown here
             p_password      varchar2
         ) RETURN VARCHAR2 IS
         /*
-        * This password check enabled some special characters using with "my :-} password.§$"
+        * This password check enables some special characters using with "my :-} password.§$"
         * and get the password strength in Oracle Forms for Oracle DB password settings.
         * Remember that you can use ANY characters in Oracle DB
         * enclosed in double quotes e.g. " . - # ~ 12 ..".
