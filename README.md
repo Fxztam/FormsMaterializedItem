@@ -108,12 +108,12 @@ This modernization of Forms items with materialized item handlings is shown here
         -- Friedhold Matz - 2018-FEB --
         -- Automated self check sequence definition . --
         BEGIN
-            --                   block          item        value         result( DEFAULT::OK | NOK )
+            --                   block          item        value                result( DEFAULT::OK | NOK )
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'USERNAME', 'Tester'         				 );
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'FULLNAME', 'Friedhold Matz' 				 );
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.'         			,'OK'); -- <<< that's FALSE !
+        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.'                        ,'OK'); -- <<< that's FALSE !
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL',    'fx@xx.com'      				 );
-        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',   'fx@xx.com'      		   ,'NOK');
+        pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',   'fx@xx.com'                     ,'NOK');
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'EMAIL2',   'fy@xx.com'      				 );
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'QUERY',    'What''s the name of your cat ?');
         pkg_Item.prc_chk_item('BLK_ACCOUNT', 'ANSWER',   'Susi'           				 );
