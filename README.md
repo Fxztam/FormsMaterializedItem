@@ -6,7 +6,7 @@ This Oracle Forms PoC demo shows simple materialized handlings of Forms items wi
 * Materializing of non-database table Forms items with 3 additional items for labeling, underlining and messaging
 * shows a simple verification of Oracle password inputs
 * completion check of all defined items
-* demonstrates a automatic Forms item test sequence with comparizion of result states and values
+* demonstrates a automatic Forms item test sequence with comparison of result states and values
 
 ## Getting Started
 
@@ -101,7 +101,7 @@ This modernization of Forms items with materialized item handlings is shown here
                 END IF;
         END IF;
     ```
-* Automatic test with comparizion of result states and values:
+* Automatic test with comparison of result states and values:
 
     ```sql
         PROCEDURE prc_chk_item_sequence IS
